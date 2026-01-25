@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using UnityEngine.Localization.Settings;
 
 namespace PaApi;
 
@@ -10,7 +11,7 @@ internal class Plugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
     Harmony _harmony;
-    const string Guid = "me.ytarame.PaApi";
+    public const string Guid = "me.ytarame.PaApi";
     const string Name = "PaApi";
     const string Version = "1.0.0";
 
@@ -22,6 +23,7 @@ internal class Plugin : BaseUnityPlugin
         _harmony = new Harmony(Guid);
         _harmony.PatchAll();
 
+        LocalizationSettings.StringDatabase.TableProvider = new PaApiTableProvider();
         // Plugin startup logic
         Logger.LogInfo($"Plugin {Guid} is loaded!");
     }

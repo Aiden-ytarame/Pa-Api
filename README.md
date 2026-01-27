@@ -30,7 +30,7 @@ Which should be done only once in your plugin initialization
 
 * Download the PaApi.dll from the latest github release and reference it in your plugin's project
 * Put *[BepInDependency("me.ytarane.PaApi")] attribute in your plugin
-* Remember to set aiden_ytarame-PaApi as a dependency in your manifest if you're uploading to thunderstore
+* Remember to set aiden_ytarame-PaApi-1.0.0 as a dependency in your manifest if you're uploading to thunderstore
   
 ### r2modman (recommended)
 

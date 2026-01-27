@@ -45,7 +45,7 @@ Which should be done only once in your plugin initialization
   
 <img src="https://github.com/user-attachments/assets/7d57b1cf-39cf-4441-8841-e23ad77ed3e6" width="50%">
 
-* Download the [PaApi]() zip from latest release available on thunderstore.
+* Download the [PaApi](https://thunderstore.io/c/project-arrhythmia/p/aiden_ytarame/PaApi/) zip from latest release available on thunderstore.
 * In your game's folder there will be a new folder called "bepinex". Merge the Bepinex folder on the PaApi zip file with the one in your game's folder.
 * Open the game and enjoy!
 

@@ -14,7 +14,7 @@ internal class Plugin : BaseUnityPlugin
     Harmony _harmony;
     public const string Guid = "me.ytarame.PaApi";
     const string Name = "PaApi";
-    const string Version = "1.0.0";
+    const string Version = "1.0.1";
 
 
     private void Awake()
@@ -23,7 +23,7 @@ internal class Plugin : BaseUnityPlugin
         
         _harmony = new Harmony(Guid);
         _harmony.PatchAll();
-
+        
         LocalizationSettings.StringDatabase.TableProvider = new PaApiTableProvider();
         // Plugin startup logic
         Logger.LogInfo($"Plugin {Guid} is loaded!");

@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 using UnityEngine.Localization.Settings;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace PaApi;
@@ -90,24 +91,58 @@ public static class SettingsHelper
             Object.Instantiate(_spacerPrefab, _settingsPanel);
         }
 
-        public void Toggle(string label, ConfigEntry<bool> config, Action<bool> callback = null)
+        [Obsolete("Use the overload with a description argument")]
+        public void Toggle(string label, ConfigEntry<bool> config, Action<bool> callback = null) => Toggle(label, null, config, callback);
+     
+        public void Toggle(string label, string description, ConfigEntry<bool> config, Action<bool> callback = null)
         {
             CheckPageEnd();
 
             var toggle = Object.Instantiate(_togglePrefab, _settingsPanel).GetComponent<UI_Toggle>();
             toggle.Value = config.Value;
             toggle.DataID = null;
-            toggle.ToggleLabel.text = label;
             toggle.OnValueChanged.AddListener(x =>
             {
                 config.Value = x;
                 callback?.Invoke(x);
             });
 
-            toggle.ToggleLabel.text = label;
-            UIStateManager.inst.RefreshTextCache(toggle.ToggleLabel, label);
+            TextMeshProUGUI text = null;
+            foreach (Graphic graphics in toggle.subGraphics)
+            {
+                TextMeshProUGUI component = graphics?.GetComponent<TextMeshProUGUI>();
+                if (component != null)
+                {
+                    text = component;
+                    break;
+                }
+            }
+
+            if (text == null)
+            {
+                Plugin.Logger.LogFatal("Could not find text for Toggle");
+                return;
+            }
+         
+            text.text = label;
+            UIStateManager.inst.RefreshTextCache(text, label);
+
+            if (toggle.Description)
+            {
+                toggle.Description.text = description;
+                UIStateManager.inst.RefreshTextCache(toggle.Description, description);
+                if (string.IsNullOrEmpty(description))
+                {
+                    toggle.SetLocalization(toggle.Description, guid, "null", "null");
+                }
+                else
+                {
+                    toggle.SetLocalization(toggle.Description, guid, description, description);
+                }
+            }
+            
             _modPage.SubElements.Add(toggle);
-            toggle.SetLocalization(toggle.ToggleLabel, guid, label, label);
+            toggle.SetLocalization(text, guid, label, label);
 
             toggle.OverrideNormalColor = color;
             callback?.Invoke(config.Value);

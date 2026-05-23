@@ -90,11 +90,10 @@ public static class SettingsHelper
 
             Object.Instantiate(_spacerPrefab, _settingsPanel);
         }
-
-        [Obsolete("Use the overload with a description argument")]
-        public void Toggle(string label, ConfigEntry<bool> config, Action<bool> callback = null) => Toggle(label, null, config, callback);
+        
+        public void Toggle(string label, ConfigEntry<bool> config, Action<bool> callback = null) => Toggle(label, null, null, config, callback);
      
-        public void Toggle(string label, string description, ConfigEntry<bool> config, Action<bool> callback = null)
+        public void Toggle(string label, string onDescription, string offDescription, ConfigEntry<bool> config, Action<bool> callback = null)
         {
             CheckPageEnd();
 
@@ -127,17 +126,42 @@ public static class SettingsHelper
             text.text = label;
             UIStateManager.inst.RefreshTextCache(text, label);
 
+            if (!string.IsNullOrEmpty(onDescription) && !string.IsNullOrEmpty(offDescription))
+            {
+                toggle.OnValueChanged.AddListener(x =>
+                {
+                    toggle.RefreshToggleDescription();
+                    if (toggle.Description)
+                    {
+                        SingletonBase<UIStateManager>.Inst.RefreshTextCache(toggle.Description, x ? onDescription : offDescription);
+                    }
+                });
+            }
+            else
+            {
+                if (toggle.Description)
+                {
+                    toggle.Description.enabled = false;
+                }
+            }
+            
             if (toggle.Description)
             {
-                toggle.Description.text = description;
-                UIStateManager.inst.RefreshTextCache(toggle.Description, description);
-                if (string.IsNullOrEmpty(description))
+                string desc =  toggle.Value ? onDescription : offDescription;
+                if (string.IsNullOrEmpty(desc))
                 {
-                    toggle.SetLocalization(toggle.Description, guid, "null", "null");
+                    desc = "Missing";
                 }
-                else
+                toggle.Description.text = desc;
+                UIStateManager.inst.RefreshTextCache(toggle.Description, desc);
+                
+                //if (string.IsNullOrEmpty(description))
                 {
-                    toggle.SetLocalization(toggle.Description, guid, description, description);
+                    //toggle.SetLocalization(toggle.Description, guid, "null", "null");
+                }
+               // else
+                {
+                    //toggle.SetLocalization(toggle.Description, guid, description, description);
                 }
             }
             
@@ -232,7 +256,9 @@ public static class SettingsHelper
             {
                 _ID = $"{guid} page {page}",
                 PageContainer = _settingsPanel.parent.gameObject,
-                SubElements = [_settingsPanel.parent.GetChild(0).GetChild(0).GetComponent<UI_Button>()]
+                SubElements = [_settingsPanel.parent.GetChild(0).GetChild(0).GetComponent<UI_Button>()],
+                BottomTitleLocalized = new LocalizedString(),
+                TitleLocalized = new LocalizedString(Plugin.Guid, "ModSettings")
             };
             _settingsBook.Pages.Add(_modPage);
 
@@ -337,9 +363,10 @@ public static class SettingsHelper
         _settingsBook = _settingTabButtonPrefab.parent.parent.parent.GetComponent<UI_Book>();
         
         //get 'prefabs'
-        Transform prefabsParent = _settingsBook.transform.Find("Audio/Right");
-        _sliderPrefab = prefabsParent.Find("Music").gameObject;
-        _togglePrefab = prefabsParent.Find("Checkpoint SFX").gameObject;
+        
+        Transform prefabsParent = _settingsBook.transform.Find("Accessibility/Right");
+        _sliderPrefab = _settingsBook.transform.Find("Audio/Right/Music").gameObject;
+        _togglePrefab = prefabsParent.Find("High Contrast").gameObject;
         _labelPrefab = prefabsParent.Find("General Title").gameObject;
         _spacerPrefab = prefabsParent.Find("spacer").gameObject;
 
@@ -358,7 +385,7 @@ public static class SettingsHelper
         });
         modUiButton.Text.text = "Mod Settings";
         UIStateManager.Inst.RefreshTextCache(modUiButton.Text, "Mod Settings");
-        modUiButton.SetLocalization(modUiButton.Text, Plugin.Guid, "mod settings", "Mod Settings");
+        modUiButton.SetLocalization(modUiButton.Text, Plugin.Guid, "ModSettings", "Mod Settings");
     
  
         //add our button to the Settings page in the UI_Book in the Canvas
@@ -425,7 +452,9 @@ public static class SettingsHelper
         {
             _ID = $"{setting.Key} page 0",
             PageContainer = settingsPanel.parent.gameObject,
-            SubElements = [settingsPanel.parent.GetChild(0).GetChild(0).GetComponent<UI_Button>()]
+            SubElements = [settingsPanel.parent.GetChild(0).GetChild(0).GetComponent<UI_Button>()],
+            BottomTitleLocalized = new LocalizedString(),
+            TitleLocalized = new LocalizedString(Plugin.Guid, "ModSettings")
         };
         _settingsBook.Pages.Add(_modPage);
             
@@ -497,9 +526,11 @@ public static class SettingsHelper
         {
             _ID = $"PaApi.ModSettings.{page}",
             PageContainer = modSetingsPanel.gameObject,
-            SubElements = [modSettingsButtonList.GetChild(0).GetComponent<UI_Button>(), modSetingsPanel.GetChild(3).GetComponent<UI_Text>()]
+            SubElements = [modSettingsButtonList.GetChild(0).GetComponent<UI_Button>(), modSetingsPanel.GetChild(3).GetComponent<UI_Text>()],
+            BottomTitleLocalized = new LocalizedString(),
+            TitleLocalized = new LocalizedString(Plugin.Guid, "ModSettings")
         };
-        _settingsBook.Pages.Add(_modSettingsPage );
+        _settingsBook.Pages.Add(_modSettingsPage);
 
         return modSettingsButtonList;
     }

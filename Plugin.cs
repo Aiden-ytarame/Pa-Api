@@ -7,14 +7,13 @@ using UnityEngine.Localization.Settings;
 namespace PaApi;
 
 [BepInPlugin(Guid, Name, Version)]
-[BepInProcess("Project Arrhythmia.exe")]
 internal class Plugin : BaseUnityPlugin
 {
     internal new static ManualLogSource Logger;
     Harmony _harmony;
     public const string Guid = "me.ytarame.PaApi";
     const string Name = "PaApi";
-    const string Version = "1.0.1";
+    const string Version = "1.0.2";
 
 
     private void Awake()
@@ -25,6 +24,7 @@ internal class Plugin : BaseUnityPlugin
         _harmony.PatchAll();
         
         LocalizationSettings.StringDatabase.TableProvider = new PaApiTableProvider();
+        
         // Plugin startup logic
         Logger.LogInfo($"Plugin {Guid} is loaded!");
     }

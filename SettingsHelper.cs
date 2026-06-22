@@ -107,7 +107,7 @@ public static class SettingsHelper
             });
 
             TextMeshProUGUI text = null;
-            foreach (Graphic graphics in toggle.subGraphics)
+            foreach (Graphic graphics in toggle.multiGraphics.subGraphics)
             {
                 TextMeshProUGUI component = graphics?.GetComponent<TextMeshProUGUI>();
                 if (component != null)

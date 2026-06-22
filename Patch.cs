@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -5,17 +6,6 @@ using UnityEngine.Localization.Tables;
 using VGFunctions;
 
 namespace PaApi;
-
-[HarmonyPatch(typeof(ShowChangeLog))]
-internal static class UiPatch
-{
-    [HarmonyPatch(nameof(ShowChangeLog.Start))]
-    [HarmonyPrefix]
-    private static void PreStart()
-    {
-        SettingsHelper.SetupMenu();
-    }
-}
 
 [HarmonyPatch(typeof(SettingsManager))]
 internal static class SettingsPatch

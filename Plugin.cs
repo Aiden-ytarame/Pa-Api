@@ -14,7 +14,7 @@ internal class Plugin : BaseUnityPlugin
     Harmony _harmony;
     public const string Guid = "me.ytarame.PaApi";
     const string Name = "PaApi";
-    const string Version = "1.0.4";
+    const string Version = "1.0.5";
 
 
     private void Awake()

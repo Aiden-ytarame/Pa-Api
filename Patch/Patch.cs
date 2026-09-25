@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 using VGFunctions;
 
-namespace PaApi;
+namespace PaApi.Patch;
 
 [HarmonyPatch(typeof(SettingsManager))]
 internal static class SettingsPatch

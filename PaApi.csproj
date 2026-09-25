@@ -34,6 +34,10 @@
       <HintPath>lib\Assembly-CSharp.dll</HintPath>
     </Reference>
 			  
+    <Reference Include="Eflatun.SceneReference">
+      <HintPath>lib\Eflatun.SceneReference-publicized.dll</HintPath>
+    </Reference>
+			  
     <Reference Include="Unity.Addressables">
       <HintPath>lib\Unity.Addressables.dll</HintPath>
     </Reference>
